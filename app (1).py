@@ -189,7 +189,7 @@ def process_images(base_bytes: bytes, source_bytes: bytes) -> bytes:
     section2 = base.crop((152, 1018, 688, 1082))
 
     base.paste(section1, (0, 347), section1)
-    base.paste(section2, (152, 908), section2)
+    base.paste(section2, (152, 906.5), section2)
 
     buf = io.BytesIO()
     base.convert("RGB").save(buf, format="JPEG", quality=90, optimize=True)
