@@ -188,7 +188,7 @@ def process_images(base_bytes: bytes, source_bytes: bytes) -> bytes:
     section1 = source.crop((0, 581, 1080, 2400))
     section2 = source.crop((62, 790, 1021, 1100))
 
-    base.paste(section1, (0, 350), section1)
+    base.paste(section1, (0, 347), section1)
     base.paste(section2, (63, 715), section2)
 
     buf = io.BytesIO()
