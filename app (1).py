@@ -1,4 +1,4 @@
-import streamlit as st
+iimport streamlit as st
 from PIL import Image
 import io
 
@@ -185,10 +185,10 @@ def process_images(base_bytes: bytes, source_bytes: bytes) -> bytes:
     base   = Image.open(io.BytesIO(base_bytes)).convert("RGBA").resize(PROC_SIZE, Image.LANCZOS)
     source = Image.open(io.BytesIO(source_bytes)).convert("RGBA").resize(PROC_SIZE, Image.LANCZOS)
 
-    section1 = source.crop((58, 300, 730, 545))
+    section1 = source.crop((0, 581, 1080, 2400))
     section2 = source.crop((62, 790, 1021, 1100))
 
-    base.paste(section1, (63, 285), section1)
+    base.paste(section1, (0, 350), section1)
     base.paste(section2, (63, 715), section2)
 
     buf = io.BytesIO()
