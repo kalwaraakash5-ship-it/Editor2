@@ -186,10 +186,10 @@ def process_images(base_bytes: bytes, source_bytes: bytes) -> bytes:
     source = Image.open(io.BytesIO(source_bytes)).convert("RGBA").resize(PROC_SIZE, Image.LANCZOS)
 
     section1 = source.crop((0, 581, 1080, 2400))
-    section2 = source.crop((62, 790, 1021, 1100))
+    section2 = source.crop((152, 1018, 688, 1082))
 
     base.paste(section1, (0, 347), section1)
-    base.paste(section2, (63, 715), section2)
+    base.paste(section2, (152, 910), section2)
 
     buf = io.BytesIO()
     base.convert("RGB").save(buf, format="JPEG", quality=90, optimize=True)
