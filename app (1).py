@@ -67,6 +67,29 @@ p, label, span {
     text-transform: uppercase;
 }
 
+/* ── Selectbox ───────────────────────────────────────── */
+[data-testid="stSelectbox"] label {
+    font-size: 0.7rem !important;
+    font-weight: 500 !important;
+    color: #ffffff !important;
+    letter-spacing: 0.25rem !important;
+    text-transform: uppercase !important;
+}
+[data-testid="stSelectbox"] [data-baseweb="select"] > div {
+    background: transparent !important;
+    border: 1px solid rgba(255,255,255,0.25) !important;
+    border-radius: 0 !important;
+    color: #ffffff !important;
+    font-size: 0.75rem !important;
+    letter-spacing: 0.2rem !important;
+    text-transform: uppercase !important;
+    transition: border-color 0.15s ease !important;
+}
+[data-testid="stSelectbox"] [data-baseweb="select"] > div:hover {
+    border-color: rgba(255,255,255,0.6) !important;
+}
+[data-testid="stSelectbox"] svg { color: #ffffff !important; }
+
 /* ── File uploader ───────────────────────────────────── */
 [data-testid="stFileUploader"] {
     background: transparent !important;
@@ -179,8 +202,14 @@ def make_preview(file_bytes: bytes) -> Image.Image:
     return img
 
 
+SECTION2_COORDS = {
+    "Case 1": (152, 906),
+    "Case 2": (152, 1088),
+}
+
+
 @st.cache_data(show_spinner=False)
-def process_images(base_bytes: bytes, source_bytes: bytes) -> bytes:
+def process_images(base_bytes: bytes, source_bytes: bytes, section2_coords: tuple) -> bytes:
     """Run the full crop+paste pipeline and return JPEG bytes. Cached by inputs."""
     base   = Image.open(io.BytesIO(base_bytes)).convert("RGBA").resize(PROC_SIZE, Image.LANCZOS)
     source = Image.open(io.BytesIO(source_bytes)).convert("RGBA").resize(PROC_SIZE, Image.LANCZOS)
@@ -189,7 +218,7 @@ def process_images(base_bytes: bytes, source_bytes: bytes) -> bytes:
     section2 = base.crop((152, 1018, 688, 1082))
 
     base.paste(section1, (0, 347), section1)
-    base.paste(section2, (152, 906), section2)
+    base.paste(section2, section2_coords, section2)
 
     buf = io.BytesIO()
     base.convert("RGB").save(buf, format="JPEG", quality=90, optimize=True)
@@ -205,12 +234,15 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+selected_case = st.selectbox("Case", list(SECTION2_COORDS.keys()))
+
 base_file   = st.file_uploader("Base Image",   type=["png", "jpg", "jpeg", "webp"])
 source_file = st.file_uploader("Source Image", type=["png", "jpg", "jpeg", "webp"])
 
 if base_file and source_file:
     base_bytes   = base_file.getvalue()
     source_bytes = source_file.getvalue()
+    coords       = SECTION2_COORDS[selected_case]
 
     col1, col2 = st.columns(2)
     with col1:
@@ -223,7 +255,7 @@ if base_file and source_file:
     st.divider()
 
     with st.spinner("Processing"):
-        result_bytes = process_images(base_bytes, source_bytes)
+        result_bytes = process_images(base_bytes, source_bytes, coords)
 
     st.markdown("<h3>Result</h3>", unsafe_allow_html=True)
     st.image(result_bytes, width="stretch")
