@@ -264,7 +264,7 @@ if base_file and source_file:
     st.download_button(
         label="Download",
         data=result_bytes,
-        file_name="edited_image.jpg",
+      file_name=f"{base_file.name.rsplit('.', 1)[0]}.jpg",
         mime="image/jpeg",
         use_container_width=True,
     )
