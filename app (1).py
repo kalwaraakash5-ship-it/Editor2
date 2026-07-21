@@ -203,7 +203,7 @@ def make_preview(file_bytes: bytes) -> Image.Image:
 
 
 SECTION2_COORDS = {
-    "Case 1": (152, 1040),
+    "Case 1": (152, 1035),
     "Case 2": (152, 1088),
 }
 
